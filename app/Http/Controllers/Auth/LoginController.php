@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cms;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,9 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return view('admin.login');
+        $logo = (Cms::where('tipo', 'header')->where('llave', 'logo')->select('valor')->first())['valor'];
+
+        return view('admin.login',  ['logo' => $logo]);
     }
 
 

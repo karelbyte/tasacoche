@@ -15,6 +15,12 @@ class ModelosController extends Controller
 
     }
 
+    public function getModels($id) {
+
+        return response()->json(Modelo::select('id', 'nombre')->where('marca_id', $id)->get(), 200);
+
+    }
+
     public function getlist(Request $request) {
 
         try {

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cms;
+use App\Models\Datosganvam;
 use App\Models\Marca;
 use App\Models\Question;
 use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class FrontController extends Controller
@@ -14,7 +16,7 @@ class FrontController extends Controller
 
     public function index() {
 
-    /*  try { */
+      try {
 
           // $plantilla = Template::ObtienePlantilla()->first();
 
@@ -100,17 +102,54 @@ class FrontController extends Controller
 
           return $show->render();
 
-   /*   } catch (\Exception $exception)
+      } catch (\Exception $exception)
 
       {
 
         return 'Lo sentimos :(';
 
-      } */
+      }
 
     }
 
+    // FUNCIONES DE OBTENCION DE DATOS DE TASACION
 
+    public function getFuells() {
+
+        return response()->json(DB::table('combustibles')->select('id', 'nombre', 'codigo')->get(), 200);
+
+    }
+
+    public function getPlaques() {
+
+        return response()->json(DB::table('matriculaciones')->select('id', 'nombre', 'valor')->get(), 200);
+
+    }
+
+    public function getVersion(Request $request) {
+
+       $data = json_decode($request->input('data'), true);
+
+       //return $data['marca_id'];
+
+       $vesion =  Datosganvam::where('marca', $data['marca'])
+            ->where('modelo',$data['modelo'] )
+            ->where('anyo', $data['matricula'])
+            ->where('anyo', $data['matricula'])
+            ->where('combustible', $data['combustible'])
+            ->select('id', 'version')->get();
+
+       return response()->json($vesion, 200);
+
+    }
+
+    public function getkms() {
+
+        return response()->json(DB::table('kilometraje')->select('*')->get(), 200);
+
+    }
+
+    // ENVIO DE EMAIL
     public function sendemail(Request $request) {
 
 

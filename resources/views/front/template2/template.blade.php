@@ -13,12 +13,13 @@
     <link href="{{asset('/front/template2/vendors/camera-slider/camera.css')}}" rel="stylesheet" />
     <link href="{{asset('/front/template2/vendors/owl_carousel/owl.carousel.css')}}" rel="stylesheet" />
     <link href="{{asset('/front/template2/css/style.css')}}" rel="stylesheet" />
+    <link href="{{asset('/css/themify-icons.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css">
     <style>
-        #map {
+      #map {
             height: 330px;
             width: 100%;
-        }
+      }
     </style>
 </head>
 <body>
@@ -65,7 +66,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     </button>
-                   <a class="navbar-brand"  href="/home"><img src="{{asset($header['logo'])}}"  class="logo"/></a>
+                   <a class="navbar-brand"  href="/home"><img src="{{asset($header['logo'])}}" style="height: 50px"  class="logo"/></a>
                 </div>
             </div>
 
@@ -136,13 +137,60 @@
                       title=""
                       subtitle=""
                       shape="tab"
-                      back-button-text="Go back!"
-                      next-button-text="Go next!"
+                      back-button-text="Atras"
+                      next-button-text="Obtener Tasación"
                       finish-button-text="We're there"
-                      color="#e67e22">
-             <tab-content title="Personal details"
-                          icon="ti-user">
-                 My first tab content
+                      color="rgba(17, 31, 41, 1)">
+             <tab-content icon="ti-layout-accordion-list">
+                <p> Obtenga la tasación de su vehículo de forma rápida, sencilla y gratuita, siguiendo los pasos descritos a continuación, no le llevara mas de 2 minutos.
+                </p>
+                 <p class="text-justify"> No te dejes engañar por plataformas con tasaciones sobrevaloradas. Después te devaluarán hasta el 40%. Esta plataforma te ofrece la tasación más real y sincera. Solo devaluaremos por el estado de tu vehículo (pintura, averías). Somos profesionales.
+                 </p>
+
+                 <div class="row" style="margin-top: 20px">
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Marca</label>
+                             <v-select label="nombre" v-model="marca" :options="marcas"></v-select>
+                         </div>
+                     </div>
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Modelos</label>
+                             <v-select label="nombre" v-model="modelo" :options="modelos"></v-select>
+                         </div>
+                     </div>
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Combustible</label>
+                             <v-select label="nombre" v-model="combustible" :options="combustibles"></v-select>
+                         </div>
+                     </div>
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Matriculacion</label>
+                             <v-select label="nombre" v-model="matricula" :options="matriculas"></v-select>
+                         </div>
+                     </div>
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Versión</label>
+                             <v-select label="version" v-model="version" :options="versiones"></v-select>
+                         </div>
+                     </div>
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Kilometraje</label>
+                             <v-select label="nombre" v-model="km" :options="kms"></v-select>
+                         </div>
+                     </div>
+                     <div class="col-lg-6">
+                         <div class="form-group">
+                             <label class="control-label">Email</label>
+                             <input type="text" class="form-control" v-model="email">
+                         </div>
+                     </div>
+                 </div>
              </tab-content>
              <tab-content title="Additional Info"
                           icon="ti-settings">
@@ -155,249 +203,7 @@
          </form-wizard>
      </div>
     </div>
-    <!-- TASAR -->
-       <!-- <div class="container">
-            <div class="row">
-                <section>
-                    <div class="wizard">
-                        <h3>¿Cómo obtener una tasación?</h3>
-                        <div class="wizard-inner">
-                            <div class="connecting-line"></div>
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active">
-                                    <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Incio">
-                                <span class="round-tab">
-                                   <i class=" fa fa-car"></i>
-                                </span>
-                                    </a>
-                                </li>
 
-                                <li role="presentation" class="disabled">
-                                    <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Paso 1">
-                                <span class="round-tab">
-                                    <i class="fa fa-file"></i>
-                                </span>
-                                    </a>
-                                </li>
-
-                                <li role="presentation" class="disabled">
-                                    <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Completar">
-                                <span class="round-tab">
-                                    <i class="glyphicon glyphicon-ok"></i>
-                                </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <form role="form">
-                            <div class="tab-content">
-                                <div class="tab-pane active" role="tabpanel" id="step1">
-                                    <h3>Inicio</h3>
-                                    <p>Obtenga la tasación de su vehículo de forma rápida, sencilla y gratuita, siguiendo los pasos descritos a continuación, no le llevara mas de 2 minutos.</p>
-                                    <ul class="list-inline pull-right">
-                                        <li><button type="button" class="button_all next-step">Siguiente</button></li>
-                                    </ul>
-                                </div>
-                                <div class="tab-pane" role="tabpanel" id="step2">
-                                    <h3>Rellenar formulario de tasación</h3>
-                                    <p>Rellene el formulario de tasación de su derecha para obtener la mejor tasación del mercado para su vehículo.</p>
-                                    <form  action="/api/vehiculos/tasar" id="formulario-tasacion-paso-1" novalidate="novalidate" >
-                                        <div id="custom-message">
-                                            No te dejes engañar por plataformas con tasaciones sobrevaloradas. Después te devaluarán hasta el 40%. Autotasacionexpress te ofrece la tasación más real y sincera. Solo devaluaremos por el estado de tu vehículo (pintura, averías). Somos profesionales.
-                                        </div>
-                                        <div class="alert alert-warning hide" role="alert"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Se ha producido un error y no se ha podido obtener la tasación, intentelo más tarde.</div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="marca">Marca</label>
-                                                    <select style="width: 100%" class="form-control" id="marca" name="marca" >
-                                                        <option value="">Seleccione una marca</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="modelo">Modelo</label>
-                                                    <select style="width: 100%" class="form-control" id="modelo" name="modelo">
-                                                        <option value="">Seleccione un modelo</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="combustible">Combustible</label>
-                                                    <select style="width: 100%" class="form-control" id="combustible" name="combustible">
-                                                        <option value="">Seleccione un combustible</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="matriculacion">Matriculación</label>
-                                                    <select style="width: 100%" class="form-control" id="matriculacion" name="matriculacion">
-                                                        <option value="">Seleccione un año de matriculación</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="version">Versión</label>
-                                                    <select style="width: 100%" class="form-control" id="version" name="version">
-                                                        <option value="">Seleccione una versión</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="kilometraje">Kilometraje</label>
-                                                    <select style="width: 100%" class="form-control" id="kilometraje" name="kilometraje">
-                                                        <option value="">Seleccione un kilometraje</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input  type="email" id="email" name="email" class="form-control" placeholder="Email"/>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </form>
-                                    <ul class="list-inline pull-right">
-                                        <li><button type="button" class="button_all prev-step">Anterior</button></li>
-                                        <li><button type="button" class="button_all next-step">Siguiente</button></li>
-
-                                    </ul>
-                                </div>
-                                <div class="tab-pane" role="tabpanel" id="complete">
-                                    <h3>Complete steps</h3>
-                                    <p>You have successfully completed every steps.</p>
-                                    <form action="#resumen-final" id="formulario-tasacion-paso-2" class="hide">
-                                        <h2>Pedir cita</h2>
-                                        <em class="mensaje-form">Esta es la tasación de su vehículo, rellene los datos del formulario para obtener un cita con el centro asociado más cercano.</em>
-
-                                        <div class="alert alert-warning hide" role="alert"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Se ha producido un error y no se ha podido reservar la cita, intentelo más tarde.</div>
-                                        <div id="mensaje-2">
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Tasación</label>
-
-                                                <div class="well" id="tasacion">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-                                                <label for="codigo-postal">Código postal</label>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="codigo-postal" name="codigo-postal"/>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" id="cita-id" name="cita-id" value=""/>
-                                            <input type="hidden" id="tasacion-value" name="tasacion" value=""/>
-
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="centro-asociado">Centro Asociado</label>
-                                                <div class="form-group">
-                                                    <div id="wrapper-centros-asociados">
-                                                        <div class="well" id="mesanje-centros-asociados">
-                                                            <span>Introduzca un <strong>código postal</strong> para obtener centros asociados cercanos</span>
-                                                        </div>
-                                                        <div id="centros-asociados" style="display: none;">
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="fecha">Fecha</label>
-                                                <div class="form-group">
-                                                    <select style="width: 100%" class="form-control" id="fecha">
-                                                        <option value="">Seleccione una fecha</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label for="hora">Hora</label>
-                                                <div class="form-group">
-                                                    <select style="width: 100%" class="form-control" id="hora">
-                                                        <option value="">Seleccione una hora</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="marca">Nombre</label>
-                                                    <input type="text" class="form-control" id="nombre" placeholder="Nombre">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="modelo">Apellidos</label>
-                                                    <input type="text" class="form-control" id="apellidos" placeholder="Apellidos">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="telefono">Teléfono</label>
-                                                    <input type="text" class="form-control" id="telefono" placeholder="Teléfono">
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <button type="submit" data-loading-text="Obteniendo cita..." class="btn button-custom">Pedir cita ahora</button>
-                                    </form>
-                                    <ul class="list-inline pull-right">
-                                        <li><button type="button" class="button_all prev-step">Anterior</button></li>
-                                        <li><button type="button" class="button_all btn-info-full next-step">Tasar</button></li>
-                                    </ul>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </form>
-                    </div>
-                </section>
-            </div>
-        </div> -->
-    <!-- FIN DE TASAR -->
 
     <section class="our_partners_area" id="funcion">
         <div class="book_now_aera" style="background-color: rgba(0,59,205,0.11)">
@@ -631,7 +437,9 @@
     <script src="{{asset('/front/template2/vendors/owl_carousel/owl.carousel.min.js')}}"></script>
     <script src="{{asset('/front/template2/vendors/stellar/jquery.stellar.js')}}"></script>
     <script src="{{asset('/front/template2/js/theme.js')}}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue@2.5.16/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
     <script src="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js"></script>
     <script src="{{asset('js/appvue.js')}}"></script>
 

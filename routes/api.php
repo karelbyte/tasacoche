@@ -121,3 +121,22 @@ Route::prefix('ganvam')->group(function () {
     Route::get('getmodel', 'GanvamController@getModel');
 
 });
+
+
+// RUTAS PARA TASAR EN EL FRONT
+
+Route::prefix('front')->group(function () {
+
+    Route::get('datamake', 'MarcasController@getMakeAll');
+
+    Route::get('datamodels/{id}', 'ModelosController@getModels');
+
+    Route::get('datafuells', 'FrontController@getFuells');
+
+    Route::get('dataplaques', 'FrontController@getPlaques');
+
+    Route::get('dataversion', 'FrontController@getVersion');
+
+    Route::get('datakms', 'FrontController@getkms');
+
+});

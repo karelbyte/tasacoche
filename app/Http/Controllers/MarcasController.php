@@ -10,11 +10,16 @@ use Illuminate\Support\Facades\DB;
 class MarcasController extends Controller
 {
 
-  public function index () {
+    public function index () {
 
-    return view('admin.marcas');
+      return view('admin.marcas');
 
-  }
+    }
+
+    public function getMakeAll() {
+
+        return response()->json(Marca::select('id', 'nombre')->get(), 200);
+    }
 
     public function getlist(Request $request) {
 

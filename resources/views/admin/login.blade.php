@@ -39,7 +39,7 @@
                                 <div class="text-center account-logo-box">
                                     <h2 class="text-uppercase">
                                         <a href="index.html" class="text-success">
-                                            <span><img src="{{asset('admin/appimages/icono.png')}}" alt="" height="46"></span>
+                                            <span><img src="{{asset($logo)}}" alt="" height="46"></span>
                                         </a>
                                     </h2>
                                     <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
