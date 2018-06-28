@@ -139,4 +139,8 @@ Route::prefix('front')->group(function () {
 
     Route::get('datakms', 'FrontController@getkms');
 
+    Route::get('tasa', 'FrontController@getTasa');
+
+    Route::get('cita', 'FrontController@getTasa');
+
 });

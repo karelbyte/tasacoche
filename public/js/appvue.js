@@ -1,6 +1,6 @@
 Vue.config.devtools = true;
 
-Vue.use(VueFormWizard);
+// Vue.use(VueFormWizard);
 
 Vue.component('v-select', VueSelect.VueSelect);
 
@@ -8,7 +8,7 @@ new Vue({
     el: '#app',
     data () {
         return {
-           email: '',
+           email: 'karel@ffo.com',
            marcas: [],
            marca: null,
            modelos: [],
@@ -20,7 +20,14 @@ new Vue({
            versiones: [],
            version: null,
            kms: [],
-           km: null
+           km: null,
+           step: 1,
+           tasa: '',
+           cp: '',
+           nombre: '',
+           fecha: '',
+           hora: '',
+           movil: ''
         }
     },
     watch: {
@@ -77,11 +84,18 @@ new Vue({
         getversion () {
             this.versiones = [];
             this.version = null;
-            let data = {
+            /*let data = {
                 'marca': this.marca.nombre,
                 'modelo': this.modelo.nombre,
                 'combustible': this.combustible.codigo,
                 'matricula': this.matricula.valor
+            }; */
+
+            let data = {
+                'marca': this.marca.nombre,
+                'modelo': this.modelo.id,
+                'combustible': this.combustible.id,
+                'matricula': this.matricula.id
             };
             axios({
                 method: 'get',
@@ -94,13 +108,57 @@ new Vue({
         },
         getkms () {
             this.kms = [];
-            this.kms = null;
+            this.km = null;
             axios.get('/api/front/datakms').then(res => {
                 this.kms = res.data
             })
         },
-        onComplete: function(){
-            alert('Yay. Done!');
-        }
+        checkstep1 () {
+            let chekmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(this.email);
+            if (!chekmail) {
+                toastr["info"]('No es una dirección de correo válida!')
+            } else {
+               if (this.marcas !== null && this.modelo !== null && this.combustible !== null && this.matricula !== null && this.version !== null && this.km !== null ) {
+                   let data = {
+                       'km': this.km.id,
+                       'version': this.version.id,
+                       'matricula': this.matricula.id
+                   };
+                   axios({
+                       method: 'get',
+                       url: '/api/front/tasa',
+                       params: {data: data}
+                   }).then(res => {
+                       this.tasa = res.data + ' €';
+                       this.step = 2
+                   }).catch(e => {
+                   });
+               } else {
+                   toastr["info"]('Complete todo los datos para continuar!')
+               }
+
+            }
+        },
+        checkstep2 () {
+
+           if (this.cp !== '' && this.nombre !== '' && this.fecha !== '' && this.hora !== '' && this.movil !== '') {
+                    let data = {
+                        'km': this.km.id,
+                        'version': this.version.id,
+                        'matricula': this.matricula.id
+                    };
+                    axios({
+                        method: 'post',
+                        url: '/api/front/cita',
+                        data:  data
+                    }).then(res => {
+                        this.step = 3
+                    }).catch(e => {
+                    });
+                } else {
+                    toastr["info"]('Complete todo los datos para continuar!')
+           }
+      }
+
     }
 });

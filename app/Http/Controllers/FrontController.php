@@ -130,14 +130,20 @@ class FrontController extends Controller
 
        $data = json_decode($request->input('data'), true);
 
-       //return $data['marca_id'];
 
-       $vesion =  Datosganvam::where('marca', $data['marca'])
+       /* $vesion =  Datosganvam::where('marca', $data['marca'])
             ->where('modelo',$data['modelo'] )
             ->where('anyo', $data['matricula'])
-            ->where('anyo', $data['matricula'])
+            //->where('anyo', $data['matricula'])
             ->where('combustible', $data['combustible'])
-            ->select('id', 'version')->get();
+            ->select('id', 'version')->get(); */
+
+        $vesion =  DB::table('versiones')
+            ->join('version_matriculacion', 'versiones.id', 'version_matriculacion.id')
+            ->where('version_matriculacion.matriculacion_id',$data['matricula'] )
+            ->where('versiones.modelo_id', $data['modelo'])
+            ->where('versiones.combustible_id', $data['combustible'])
+            ->select('versiones.id', 'versiones.nombre')->get();
 
        return response()->json($vesion, 200);
 
@@ -146,6 +152,21 @@ class FrontController extends Controller
     public function getkms() {
 
         return response()->json(DB::table('kilometraje')->select('*')->get(), 200);
+
+    }
+
+
+    public function getTasa(Request $request) {
+
+        $data = json_decode($request->input('data'), true);
+
+        $tasa =  DB::table('version_matriculacion')
+            ->where('version_id',$data['version'] )
+            ->where('matriculacion_id', $data['matricula'])
+            ->where('kilometraje_id', $data['km'])
+            ->select('tasacion')->first();
+
+        return response()->json($tasa->tasacion, 200);
 
     }
 

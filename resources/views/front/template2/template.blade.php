@@ -13,12 +13,17 @@
     <link href="{{asset('/front/template2/vendors/camera-slider/camera.css')}}" rel="stylesheet" />
     <link href="{{asset('/front/template2/vendors/owl_carousel/owl.carousel.css')}}" rel="stylesheet" />
     <link href="{{asset('/front/template2/css/style.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{asset('admin/plugins/toastr/toastr.min.css')}}">
     <link href="{{asset('/css/themify-icons.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css">
     <style>
       #map {
             height: 330px;
             width: 100%;
+      }
+      .nk {
+          background: #111f29;
+          color:whitesmoke;
       }
     </style>
 </head>
@@ -131,77 +136,124 @@
         </div>
     </section>
     <!-- End Slider area -->
-    <div class="container">
-     <div id="app">
-         <form-wizard @on-complete="onComplete"
-                      title=""
-                      subtitle=""
-                      shape="tab"
-                      back-button-text="Atras"
-                      next-button-text="Obtener Tasación"
-                      finish-button-text="We're there"
-                      color="rgba(17, 31, 41, 1)">
-             <tab-content icon="ti-layout-accordion-list">
-                <p> Obtenga la tasación de su vehículo de forma rápida, sencilla y gratuita, siguiendo los pasos descritos a continuación, no le llevara mas de 2 minutos.
-                </p>
-                 <p class="text-justify"> No te dejes engañar por plataformas con tasaciones sobrevaloradas. Después te devaluarán hasta el 40%. Esta plataforma te ofrece la tasación más real y sincera. Solo devaluaremos por el estado de tu vehículo (pintura, averías). Somos profesionales.
-                 </p>
 
-                 <div class="row" style="margin-top: 20px">
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Marca</label>
-                             <v-select label="nombre" v-model="marca" :options="marcas"></v-select>
-                         </div>
-                     </div>
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Modelos</label>
-                             <v-select label="nombre" v-model="modelo" :options="modelos"></v-select>
-                         </div>
-                     </div>
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Combustible</label>
-                             <v-select label="nombre" v-model="combustible" :options="combustibles"></v-select>
-                         </div>
-                     </div>
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Matriculacion</label>
-                             <v-select label="nombre" v-model="matricula" :options="matriculas"></v-select>
-                         </div>
-                     </div>
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Versión</label>
-                             <v-select label="version" v-model="version" :options="versiones"></v-select>
-                         </div>
-                     </div>
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Kilometraje</label>
-                             <v-select label="nombre" v-model="km" :options="kms"></v-select>
-                         </div>
-                     </div>
-                     <div class="col-lg-6">
-                         <div class="form-group">
-                             <label class="control-label">Email</label>
-                             <input type="text" class="form-control" v-model="email">
-                         </div>
-                     </div>
-                 </div>
-             </tab-content>
-             <tab-content title="Additional Info"
-                          icon="ti-settings">
-                 My second tab content
-             </tab-content>
-             <tab-content title="Last step"
-                          icon="ti-check">
-                 Yuhuuu! This seems pretty damn simple
-             </tab-content>
-         </form-wizard>
-     </div>
+
+    <div class="container" id="app">
+        <div class="row text-center" style="background-color: rgba(243, 242, 238, 1);">
+            <div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 1}"><i class="fa fa-question-circle-o fa-3x"></i></div>
+            <div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 2}"><i class="fa fa-edit fa-3x"></i></div>
+            <div class="col-lg-4" style="margin: 5px 0 5px 0"><i class="fa fa-magic fa-3x"></i></div>
+        </div>
+        <div v-if="step === 1" class="row" style="margin: 30px 0 30px 0">
+            <div class="col-lg-12">
+            <p> Obtenga la tasación de su vehículo de forma rápida, sencilla y gratuita, siguiendo los pasos descritos a continuación, no le llevara mas de 2 minutos.
+            </p>
+            <p class="text-justify" style="margin-bottom: 15px"> No te dejes engañar por plataformas con tasaciones sobrevaloradas. Después te devaluarán hasta el 40%. Esta plataforma te ofrece la tasación más real y sincera. Solo devaluaremos por el estado de tu vehículo (pintura, averías). Somos profesionales.
+            </p>
+            </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Marca</label>
+                        <v-select label="nombre" v-model="marca" :options="marcas"></v-select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Modelos</label>
+                        <v-select label="nombre" v-model="modelo" :options="modelos"></v-select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Combustible</label>
+                        <v-select label="nombre" v-model="combustible" :options="combustibles"></v-select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Matriculacion</label>
+                        <v-select label="nombre" v-model="matricula" :options="matriculas"></v-select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Versión</label>
+                        <v-select label="nombre" v-model="version" :options="versiones"></v-select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Kilometraje</label>
+                        <v-select label="nombre" v-model="km" :options="kms"></v-select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <input type="text" class="form-control" v-model="email" value="karel@d.com">
+                    </div>
+                </div>
+            <div class="col-lg-12" style="text-align: center" >
+                <button class="button_all" @click="checkstep1()">Tasacion</button>
+            </div>
+        </div>
+        <div v-if="step === 2" style="margin: 30px 0 30px 0">
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-justify" style="margin-bottom: 15px"> Esta es la tasación de su vehículo, rellene los datos del formulario para obtener un cita con el centro asociado más cercano.</p>
+            </div>
+            <div class="col-lg-7">
+                <div class="form-group">
+                    <label class="control-label">Tasación</label> <br>
+                    <div class="well text-center" style="font-size: 35px; font-weight: bold; color: #0d2356">@{{ tasa }}</div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="control-label">Centro Asociado</label>
+                    <div class="well text-center">Introduzca un <strong>código postal</strong> para obtener centros asociados cercanos</div>
+                </div>
+            </div>
+        </div>
+       <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label class="control-label">Codigo postal</label>
+                    <input type="text" class="form-control" v-model="cp">
+                </div>
+            </div>
+       </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="control-label">Selecione una fecha</label>
+                    <input type="date" class="form-control" v-model="fecha">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="control-label">Selecione una hora</label>
+                    <input type="time" class="form-control" v-model="hora">
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="control-label">Nombre completo</label>
+                    <input type="text" class="form-control" v-model="nombre">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="control-label">Telefono</label>
+                    <input type="tel" class="form-control" v-model="movil">
+                </div>
+            </div>
+            <div class="col-lg-12" style="text-align: center" >
+                <a href="#" class="button_all">Pedir cita</a>
+            </div>
+        </div>
+        </div>
     </div>
 
 
@@ -437,10 +489,12 @@
     <script src="{{asset('/front/template2/vendors/owl_carousel/owl.carousel.min.js')}}"></script>
     <script src="{{asset('/front/template2/vendors/stellar/jquery.stellar.js')}}"></script>
     <script src="{{asset('/front/template2/js/theme.js')}}"></script>
+    <script src="{{asset('admin/plugins/toastr/toastr.min.js')}}"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue@2.5.16/dist/vue.min.js"></script>
     <script src="https://unpkg.com/vue-select@latest"></script>
     <script src="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js"></script>
+    <script src="{{asset('admin/appjs/tools.js')}}"></script>
     <script src="{{asset('js/appvue.js')}}"></script>
 
 </body>
