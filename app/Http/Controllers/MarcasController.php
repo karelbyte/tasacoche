@@ -18,7 +18,7 @@ class MarcasController extends Controller
 
     public function getMakeAll() {
 
-        return response()->json(Marca::select('id', 'nombre')->get(), 200);
+        return response()->json(Marca::select('id', 'marca', 'imagen')->get(), 200);
     }
 
     public function getlist(Request $request) {
@@ -31,9 +31,9 @@ class MarcasController extends Controller
 
             $datos = DB::table('marcas');
 
-            if ( $filters['nombre'] !== '') $datos->where('nombre', 'LIKE', '%'.$filters['nombre'].'%');
+            if ( $filters['marca'] !== '') $datos->where('marca', 'LIKE', '%'.$filters['marca'].'%');
 
-            $datos = $datos->orderby('nombre', 'asc');
+            $datos = $datos->orderby('marca', 'asc');
 
             $total = $datos->select('*')->count();
 

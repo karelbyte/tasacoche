@@ -17,6 +17,15 @@ Route::get('users/list', 'UsersController@getlist');
 Route::resource('users', 'UsersController');
 
 
+// RUTAS DE CITAS
+
+Route::prefix('citas')->group(function () {
+
+    Route::get('list', 'CitasController@getlist');
+
+});
+Route::resource('/citas', 'CitasController');
+
 Route::prefix('headers')->group(function () {
 
     Route::get('options', 'CmsController@getHeadersOptions');
@@ -120,6 +129,10 @@ Route::prefix('ganvam')->group(function () {
 
     Route::get('getmodel', 'GanvamController@getModel');
 
+    Route::get('getfuels', 'GanvamController@getFuels');
+
+    Route::get('getest', 'GanvamController@gettest');
+
 });
 
 
@@ -131,9 +144,9 @@ Route::prefix('front')->group(function () {
 
     Route::get('datamodels/{id}', 'ModelosController@getModels');
 
-    Route::get('datafuells', 'FrontController@getFuells');
+    Route::get('datafuells/{modelo}', 'FrontController@getFuells');
 
-    Route::get('dataplaques', 'FrontController@getPlaques');
+    Route::get('dataplaques/{modelo}/{com}', 'FrontController@getPlaques');
 
     Route::get('dataversion', 'FrontController@getVersion');
 
@@ -141,6 +154,6 @@ Route::prefix('front')->group(function () {
 
     Route::get('tasa', 'FrontController@getTasa');
 
-    Route::get('cita', 'FrontController@getTasa');
+    Route::post('cita', 'FrontController@setCita');
 
 });

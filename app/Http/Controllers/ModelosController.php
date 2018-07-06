@@ -35,7 +35,7 @@ class ModelosController extends Controller
 
             $datos = $datos->orderby('marca_id', 'asc');
 
-            $total = $datos->select('modelos.id', 'modelos.marca_id', 'modelos.nombre', 'modelos.factor_conversion', 'marcas.nombre as marca' )->count();
+            $total = $datos->select('modelos.id', 'modelos.marca_id', 'modelos.nombre', 'modelos.factor', 'marcas.marca as marca' )->count();
 
             $list =  $datos->skip($skip)->take($request['take'])->get();
 
@@ -64,7 +64,7 @@ class ModelosController extends Controller
 
         $item->nombre = $request->input('nombre');
 
-        $item->factor = $request->input('factor_conversion');
+        $item->factor = $request->input('factor');
 
         $item->save();
 
@@ -79,7 +79,7 @@ class ModelosController extends Controller
 
         $item->nombre = $request->input('nombre');
 
-        $item->factor_conversion = $request->input('factor_conversion');
+        $item->factor = $request->input('factor');
 
         $item->save();
 

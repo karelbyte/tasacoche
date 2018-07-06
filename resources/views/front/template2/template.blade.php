@@ -15,7 +15,6 @@
     <link href="{{asset('/front/template2/css/style.css')}}" rel="stylesheet" />
     <link rel="stylesheet" href="{{asset('admin/plugins/toastr/toastr.min.css')}}">
     <link href="{{asset('/css/themify-icons.css')}}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css">
     <style>
       #map {
             height: 330px;
@@ -142,7 +141,7 @@
         <div class="row text-center" style="background-color: rgba(243, 242, 238, 1);">
             <div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 1}"><i class="fa fa-question-circle-o fa-3x"></i></div>
             <div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 2}"><i class="fa fa-edit fa-3x"></i></div>
-            <div class="col-lg-4" style="margin: 5px 0 5px 0"><i class="fa fa-magic fa-3x"></i></div>
+            <div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 3}"><i class="fa fa-check-circle fa-3x"></i></div>
         </div>
         <div v-if="step === 1" class="row" style="margin: 30px 0 30px 0">
             <div class="col-lg-12">
@@ -154,7 +153,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label">Marca</label>
-                        <v-select label="nombre" v-model="marca" :options="marcas"></v-select>
+                        <v-select label="marca" v-model="marca" :options="marcas"></v-select>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -172,13 +171,13 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label">Matriculacion</label>
-                        <v-select label="nombre" v-model="matricula" :options="matriculas"></v-select>
+                        <v-select label="anyo" v-model="matricula" :options="matriculas"></v-select>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label">Versión</label>
-                        <v-select label="nombre" v-model="version" :options="versiones"></v-select>
+                        <v-select label="version" v-model="version" :options="versiones"></v-select>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -190,11 +189,11 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label">Email</label>
-                        <input type="text" class="form-control" v-model="email" value="karel@d.com">
+                        <input type="text" class="form-control" v-model="email" >
                     </div>
                 </div>
             <div class="col-lg-12" style="text-align: center" >
-                <button class="button_all" @click="checkstep1()">Tasacion</button>
+                <button class="button_all" @click="checkstep1()">Tasación</button>
             </div>
         </div>
         <div v-if="step === 2" style="margin: 30px 0 30px 0">
@@ -250,9 +249,23 @@
                 </div>
             </div>
             <div class="col-lg-12" style="text-align: center" >
-                <a href="#" class="button_all">Pedir cita</a>
+                <button class="button_all" @click="checkstep2()">Pedir cita</button>
             </div>
         </div>
+        </div>
+        <div v-if="step === 3" style="margin: 30px 0 30px 0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="text-justify" style="margin-bottom: 20px">Le enviamos un correo al buzon que nos proporcionó, siga las intruciones para la confirmación de su cita.</p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="well text-center" style="font-size: 25px; font-weight: bold; color: #0d2356">GRACIAS POR SU PREFERENCIA</div>
+                </div>
+                <div class="col-lg-12">
+                    <button class="button_all" @click="retax()">Otra Tasación</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -490,10 +503,9 @@
     <script src="{{asset('/front/template2/vendors/stellar/jquery.stellar.js')}}"></script>
     <script src="{{asset('/front/template2/js/theme.js')}}"></script>
     <script src="{{asset('admin/plugins/toastr/toastr.min.js')}}"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vue@2.5.16/dist/vue.min.js"></script>
+    <script src="{{asset('admin/appjs/axios.min.js')}}"></script>
+    <script src="{{asset('admin/appjs/vue.min.js')}}"></script>
     <script src="https://unpkg.com/vue-select@latest"></script>
-    <script src="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js"></script>
     <script src="{{asset('admin/appjs/tools.js')}}"></script>
     <script src="{{asset('js/appvue.js')}}"></script>
 

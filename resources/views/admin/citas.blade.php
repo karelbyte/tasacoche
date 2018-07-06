@@ -6,13 +6,13 @@
     <div class="row">  <!--  ESTO ES PROFUNDIDAD -->
         <div class="col-xs-12">
             <div class="page-title-box">
-                <h4 class="page-title"> <i class="fa fa-users"></i> Modulo Marcas</h4>
+                <h4 class="page-title"> <i class="fa fa-users"></i> Listado de citas</h4>
                 <ol class="breadcrumb p-0 m-0">
                     <li>
-                        <a href="#">Admin</a>
+                        <a href="#"></a>
                     </li>
                     <li>
-                        <a href="#">Marcas</a>
+                        <a href="#">Citas</a>
                     </li>
                 </ol>
                 <div class="clearfix"></div>
@@ -24,51 +24,56 @@
         <div class="col-lg-7">
             <div class="panel panel-border Panel Inverse">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><span v-html="title"></span></h3>
+                    <h3 class="panel-title">@{{title}}</h3>
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal">
                         <div class="form-group">
                             <label for="inputName" class="col-sm-3 control-label">Nombre</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" v-model="item.marca" >
+                                <input type="text" class="form-control" v-model="item.name" placeholder="...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label">Factor de conversion</label>
+                            <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-9">
-                                <input type="email" class="form-control" v-model="item.factor" >
+                                <input type="email" class="form-control" v-model="item.email" placeholder="Email">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Logo</label>
+                            <label for="inputPassword3" class="col-sm-3 control-label">Password</label>
                             <div class="col-sm-9">
-                                <div class="thumbnail">
-                                    <img :src="item.imagen" class="img-responsive" style="width: 150px">
-                                    <div class="caption">
-                                        <div class="input-group m-t-10 form-group-sm">
-                                            <input type="file" name="file" id="logo" class="form-control" style="display: none" accept="image/*" @change="getfile($event, 'imagen')">
-                                            <span class="input-group-btn">
-                                <button type="button" class="btn waves-effect waves-light btn-inverse btn-sm" @click="find('logo')"><i class="fa fa-search"></i> Buscar..</button>
-                                </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="password" class="form-control" v-model="item.password" placeholder="Password">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="inputPassword4" class="col-sm-3 control-label">Re Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" v-model="repassword" placeholder="Retype Password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <div class="checkbox checkbox-primary">
+                                <input v-model="item.status_id" type="checkbox">
+                                <label for="checkbox2">
+                                    Activo
+                                </label>
+                            </div>
+                        </div>
+                </div>
                     </form>
                 </div>
                 <div class="panel-footer">
-                    <button class="btn btn-success btn-sm" @click="save()">Guardar</button>
+                    <button v-if="item.password === repassword" class="btn btn-success btn-sm" @click="save()">Guardar</button>
                     <button class="btn btn-default btn-sm" @click="close()">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div v-if="!unlookview" class="row">
+    <div v-if="!unlookview" class="row" style="font-size: 12px; color:black">
         <button class="btn btn-custom btn-inverse btn-sm" @click="add()">Nuevo</button>
-        <!--<button class="btn btn-custom btn-bordered btn-sm" @click="getGAN()"><i v-if="gan" class="fa fa-spinner fa-spin"></i> GANVAM</button> -->
         <div class="panel panel-border panel-inverse" style="margin-top: 5px">
             <!-- Default panel contents -->
             <div class="panel-heading">
@@ -78,19 +83,35 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th class="fixcellheader">Fecha</th>
+                    <th class="fixcellheader">Hora</th>
                     <th class="fixcellheader">Nombre</th>
-                    <th class="fixcellheader">Factor</th>
-                    <th class="fixcellheader">Logo</th>
-                    <th class="fixcellheader"></th>
+                    <th class="fixcellheader">Email</th>
+                    <th class="fixcellheader">Telf</th>
+                    <th class="fixcellheader">C/Postal</th>
+                    <th class="fixcellheader">Version</th>
+                    <th class="fixcellheader">Matriculacion</th>
+                    <th class="fixcellheader">Kms</th>
+                    <th class="fixcellheader">Tasa</th>
+                    <th class="fixcellheader">Estado</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="entity in lists" :key="entity.id" style="cursor: pointer">
-                    <td style="padding: 25px 0 10px 15px">@{{entity.marca}}</td>
-                    <td style="padding: 25px 0 10px 15px">@{{entity.factor}}</td>
-                    <td><img :src="getimg(entity.imagen)" alt="No Logo" style="width: 50px; height: 50px"></td>
+                <tr v-for="entity in lists" :key="entity.id">
+                    <td class="fixcell">@{{entity.fecha}}</td>
+                    <td class="fixcell">@{{entity.hora}}</td>
+                    <td class="fixcell">@{{entity.nombres}}</td>
+                    <td class="fixcell">@{{entity.email}}</td>
+                    <td class="fixcell">@{{entity.telefono}}</td>
+                    <td class="fixcell">@{{entity.cp}}</td>
+                    <td class="fixcell">@{{entity.version}}</td>
+                    <td class="fixcell">@{{entity.matricula}}</td>
+                    <td class="fixcell">@{{entity.km}}</td>
+                    <td class="fixcell">@{{entity.tasacion}}</td>
+                    <td class="fixcell">@{{entity.estado}}</td>
                     <td>
-                        <button class="btn btn-teal btn-sm" @click="edit(entity)"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-teal btn-sm" @click="edit(entity)"><i class="fa fa-check-circle"></i></button>
                         <button class="btn btn-danger btn-sm" @click="showdelete(entity)"><i class="fa fa-eraser"></i></button>
                     </td>
                 </tr>
@@ -110,7 +131,7 @@
                         <h3 class="panel-title">Eliminar</h3>
                     </div>
                     <div class="panel-body">
-                        <p>Elemento: <samp class="txtblack">@{{item.nombre}}</samp> </p>
+                        <p>Elemento: <samp class="txtblack">@{{item.name}}</samp> </p>
                         <p>Cuidado! Esta acción es irreversible. Desea proceder?</p>
                     </div>
                     <div class="panel-footer text-right">
@@ -127,5 +148,5 @@
 
 @section('script')
  @parent
- <script src="{{asset('admin/appjs/make.js')}}"></script>
+ <script src="{{asset('admin/appjs/citas.js')}}"></script>
 @endsection

@@ -49,7 +49,7 @@ new Vue({
             item: {
               id: 0,
               nombre: '',
-              factor_conversion: '',
+              factor: '',
               imagen: '',
 
             },
@@ -90,7 +90,7 @@ new Vue({
         add () {
             this.title = 'Añadir Modelo';
             this.item.nombre = '';
-            this.item.factor_conversion = '';
+            this.item.factor = '';
             this.act = 'post';
             this.unlookview = true
         },

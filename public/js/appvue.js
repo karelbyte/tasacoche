@@ -1,16 +1,14 @@
 Vue.config.devtools = true;
 
-// Vue.use(VueFormWizard);
-
 Vue.component('v-select', VueSelect.VueSelect);
 
 new Vue({
     el: '#app',
     data () {
         return {
-           email: 'karel@ffo.com',
+           email: '',
            marcas: [],
-           marca: null,
+           marca: 0,
            modelos: [],
            modelo: null,
            combustibles: [],
@@ -27,7 +25,8 @@ new Vue({
            nombre: '',
            fecha: '',
            hora: '',
-           movil: ''
+           movil: '',
+           url: 'marcas/'
         }
     },
     watch: {
@@ -41,6 +40,9 @@ new Vue({
       this.getdata()
     },
     methods: {
+        geturl (ur) {
+            return 'marcas/' + ur
+        },
         getdata () {
           axios.get('/api/front/datamake').then(res => {
               this.marcas = res.data
@@ -56,46 +58,25 @@ new Vue({
         getfuell () {
             this.combustibles = [];
             this.combustible = null;
-            axios.get('/api/front/datafuells').then(res => {
-                this.combustibles = res.data
-            })
-        },
-        getfuell () {
-            this.combustibles = [];
-            this.combustible = null;
-            axios.get('/api/front/datafuells').then(res => {
-                this.combustibles = res.data
-            })
-        },
-        getfuell () {
-            this.combustibles = [];
-            this.combustible = null;
-            axios.get('/api/front/datafuells').then(res => {
+            axios.get('/api/front/datafuells/' + this.modelo.nombre).then(res => {
                 this.combustibles = res.data
             })
         },
         getplaques () {
             this.matriculas = [];
             this.matricula = null;
-            axios.get('/api/front/dataplaques').then(res => {
-                this.matriculas = res.data
+            axios.get('/api/front/dataplaques/' + this.modelo.nombre + '/' + this.combustible.codigo).then(res => {
+              this.matriculas = res.data
             })
         },
         getversion () {
             this.versiones = [];
             this.version = null;
-            /*let data = {
-                'marca': this.marca.nombre,
+            let data = {
+                'marca': this.marca.marca,
                 'modelo': this.modelo.nombre,
                 'combustible': this.combustible.codigo,
-                'matricula': this.matricula.valor
-            }; */
-
-            let data = {
-                'marca': this.marca.nombre,
-                'modelo': this.modelo.id,
-                'combustible': this.combustible.id,
-                'matricula': this.matricula.id
+                'matricula': this.matricula.anyo
             };
             axios({
                 method: 'get',
@@ -120,9 +101,10 @@ new Vue({
             } else {
                if (this.marcas !== null && this.modelo !== null && this.combustible !== null && this.matricula !== null && this.version !== null && this.km !== null ) {
                    let data = {
-                       'km': this.km.id,
+                       'marca': this.marca,
+                       'modelo': this.modelo,
                        'version': this.version.id,
-                       'matricula': this.matricula.id
+                       'km': this.km.id,
                    };
                    axios({
                        method: 'get',
@@ -132,6 +114,7 @@ new Vue({
                        this.tasa = res.data + ' €';
                        this.step = 2
                    }).catch(e => {
+                       toastr["info"](e.response.data)
                    });
                } else {
                    toastr["info"]('Complete todo los datos para continuar!')
@@ -140,17 +123,24 @@ new Vue({
             }
         },
         checkstep2 () {
-
            if (this.cp !== '' && this.nombre !== '' && this.fecha !== '' && this.hora !== '' && this.movil !== '') {
                     let data = {
-                        'km': this.km.id,
-                        'version': this.version.id,
-                        'matricula': this.matricula.id
+                        'nombres': this.nombre,
+                        'email': this.email,
+                        'telefono': this.movil,
+                        'fecha': this.fecha,
+                         'hora': this.hora,
+                           'cp': this.cp,
+                        'version': this.version.version,
+                        'km': this.km.nombre,
+                        'matricula': this.matricula.anyo,
+                        'tasacion': this.tasa,
+                        'status_id': 1
                     };
                     axios({
                         method: 'post',
                         url: '/api/front/cita',
-                        data:  data
+                        data: data
                     }).then(res => {
                         this.step = 3
                     }).catch(e => {
@@ -158,6 +148,9 @@ new Vue({
                 } else {
                     toastr["info"]('Complete todo los datos para continuar!')
            }
+      },
+      retax () {
+         this.step = 1
       }
 
     }

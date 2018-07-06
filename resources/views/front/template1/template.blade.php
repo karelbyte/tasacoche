@@ -18,7 +18,9 @@
 		<!-- Main style sheet -->
 		<link href="{{asset('/front/template1/css/style.css')}}" rel="stylesheet" />
 		<!-- responsive style sheet -->
-		<link href="{{asset('/front/template2/css/responsive.css')}}" rel="stylesheet" />
+		<link href="{{asset('/front/template1/css/responsive.css')}}" rel="stylesheet" />
+		<link href="{{asset('/front/template2/css/bootstrap.min.css')}}" rel="stylesheet" />
+		<link rel="stylesheet" href="{{asset('admin/plugins/toastr/toastr.min.css')}}">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>{{$header['appName']}}</title>
 		<style>
@@ -32,6 +34,10 @@
 			#map {
 				height: 330px;
 				width: 100%;
+			}
+			.nk {
+				background: #111f29;
+				color:whitesmoke;
 			}
 		</style>
 
@@ -64,7 +70,7 @@
 				<div class="theme-menu-wrapper">
 					<div class="container">
 						<div class="bg-wrapper clearfix">
-							<div class="logo float-left"><a href="/home"><img src="{{asset($header['logo'])}}"/></a></div>
+							<div class="logo float-left"><a href="/home"><img style="height: 50px" src="{{asset($header['logo'])}}"/></a></div>
 
 							<!-- ============== Menu Warpper ================ -->
 					   		<div class="menu-wrapper float-right">
@@ -88,7 +94,7 @@
 				Theme Main Banner
 			============================================== 
 			-->
-			<div >
+			<div>
 				<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 					<div class="carousel-inner">
 						<div class="carousel-item active">
@@ -113,8 +119,147 @@
 						<span class="sr-only">Next</span>
 					</a>
 				</div>
-			</div> <!-- /#theme-main-banner -->
-			
+			</div>
+
+			<div class="container"  style="font-size: 14px" id="app">
+				<div class="row text-center" style="background-color: rgba(243, 242, 238, 1);">
+					<div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 1}"><i class="fa fa-question-circle-o fa-2x"></i></div>
+					<div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step === 2}"><i class="fa fa-edit fa-2x"></i></div>
+					<div class="col-lg-4" style="margin: 5px 0 5px 0" :class="{'nk': step ===3}"><i class="fa fa-check-circle fa-2x"></i></div>
+				</div>
+				<div v-if="step === 1" class="row" style="margin: 30px 0 30px 0">
+					<div class="col-lg-12">
+						<p> Obtenga la tasación de su vehículo de forma rápida, sencilla y gratuita, siguiendo los pasos descritos a continuación, no le llevara mas de 2 minutos.
+						</p>
+						<p class="text-justify" style="margin-bottom: 15px"> No te dejes engañar por plataformas con tasaciones sobrevaloradas. Después te devaluarán hasta el 40%. Esta plataforma te ofrece la tasación más real y sincera. Solo devaluaremos por el estado de tu vehículo (pintura, averías). Somos profesionales.
+						</p>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Marca</label>
+							<v-select label="marca" v-model="marca" :options="marcas"></v-select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Modelos</label>
+							<v-select label="nombre" v-model="modelo" :options="modelos"></v-select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Combustible</label>
+							<v-select label="nombre" v-model="combustible" :options="combustibles"></v-select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Matriculacion</label>
+							<v-select label="anyo" v-model="matricula" :options="matriculas"></v-select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Versión</label>
+							<v-select label="version" v-model="version" :options="versiones"></v-select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Kilometraje</label>
+							<v-select label="nombre" v-model="km" :options="kms"></v-select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="control-label">Email</label>
+							<input type="text" class="form-control" v-model="email" value="">
+						</div>
+					</div>
+					<div class="col-lg-12" style="text-align: center" >
+						<button class="theme-button-one" @click="checkstep1()">Tasación</button>
+					</div>
+				</div>
+				<div v-if="step === 2" style="margin: 30px 0 30px 0">
+					<div class="row">
+						<div class="col-lg-12">
+							<p class="text-justify" style="margin-bottom: 15px"> Esta es la tasación de su vehículo, rellene los datos del formulario para obtener un cita con el centro asociado más cercano.</p>
+						</div>
+						<div class="col-lg-7">
+							<div class="form-group">
+								<label class="control-label">Tasación</label> <br>
+								<div class="text-center " style="font-size: 35px; font-weight: bold; color: #0d2356;background-color: rgba(169,169,169,0.25) ">@{{ tasa }}</div>
+							</div>
+						</div>
+						<div class="col-lg-12" >
+							<div class="form-group">
+								<label class="control-label">Centro Asociado</label>
+								<div class="text-center" style="font-size: 25px; background-color: #a9a9a9; padding: 10px 0 10px 0">Introduzca un <strong>código postal</strong> para obtener centros asociados cercanos</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label">Codigo postal</label>
+								<input type="text" class="form-control" v-model="cp">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="control-label">Selecione una fecha</label>
+								<input type="date" class="form-control" v-model="fecha">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="control-label">Selecione una hora</label>
+								<input type="time" class="form-control" v-model="hora">
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="control-label">Nombre completo</label>
+								<input type="text" class="form-control" v-model="nombre">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="control-label">Telefono</label>
+								<input type="tel" class="form-control" v-model="movil">
+							</div>
+						</div>
+						<div class="col-lg-12" style="text-align: center" >
+							<div class="row">
+								<div class="col-lg-6"><button class="theme-button-one" @click="retax()">Otra Tasación</button></div>
+								<div class="col-lg-6"><button class="theme-button-one" @click="checkstep2()">Pedir cita</button></div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+				<div v-if="step === 3" style="margin: 30px 0 30px 0">
+					<div class="row">
+						<div class="col-lg-12">
+							<p class="text-justify" style="margin-bottom: 20px; font-size: 18px">Le enviamos un correo al buzon que nos proporcionó, siga las intruciones para la confirmación de su cita.</p>
+						</div>
+						<div class="col-lg-7" style="margin-bottom: 20px">
+							<div class="text-center" style="font-size: 25px; color: white; background-color: rgba(0,5,39,0.82); padding: 10px 0 10px 0">GRACIAS POR SU PREFERENCIA</div>
+						</div>
+						<div class="col-lg-12">
+							<button class="theme-button-one" @click="retax()">Otra Tasación</button>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+
 
 			<div class="callout-banner section-spacing">
 				<div class="container clearfix">
@@ -200,6 +345,7 @@
 					<!--<a href="#" class="theme-button-one">FREE QUOTES</a> -->
 				</div>
 			</div>
+
 			<div class="about-compnay-two section-spacing">
 				<div class="overlay">
 					<div class="container">
@@ -321,28 +467,9 @@
 			</button>
 			<input type="text" style="display: none" id="lat" value="{{$contac['clat']}}">
 			<input type="text" style="display: none" id="long" value="{{$contac['clong']}}">
-		<script>
-                function initMap() {
-                    var latv = document.getElementById('lat').value;
-
-                    var longv = document.getElementById('long').value;
 
 
-                    var uluru = {lat: parseFloat(latv) , lng: parseFloat(longv)};
-                    var map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 4,
-                        center: uluru
-                    });
-                    var marker = new google.maps.Marker({
-                        position: uluru,
-                        map: map
-                    });
-                }
-		</script>
-		<script async defer
-					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM6SFeJnA9eAg0BaOMNYUQYAIpV_Vcggg&callback=initMap">
-		</script>
-
+</div>
 		<script src="{{asset('/front/template1/vendor/jquery.2.2.3.min.js')}}"></script>
 		<script src="{{asset('/front/template1/vendor/popper.js/popper.min.js')}}"></script>
 		<script src="{{asset('/front/template1/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
@@ -367,8 +494,32 @@
 
 		<script src="{{asset('/front/template1/js/theme.js')}}"></script>
 
-		<script src="https://unpkg.com/vue@2.5.16/dist/vue.min.js"></script>
-		<script src="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js"></script>
-		<script src="{{asset('js/appvue.js')}}"></script>
+			<script src="{{asset('admin/plugins/toastr/toastr.min.js')}}"></script>
+		<script src="{{asset('admin/appjs/axios.min.js')}}"></script>
+		<script src="{{asset('admin/appjs/vue.min.js')}}"></script>
+			<script src="https://unpkg.com/vue-select@latest"></script>
+			<script src="{{asset('admin/appjs/tools.js')}}"></script>
+			<script src="{{asset('js/appvue.js')}}"></script>
+			<script>
+                function initMap() {
+                    var latv = document.getElementById('lat').value;
+
+                    var longv = document.getElementById('long').value;
+
+
+                    var uluru = {lat: parseFloat(latv) , lng: parseFloat(longv)};
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 4,
+                        center: uluru
+                    });
+                    var marker = new google.maps.Marker({
+                        position: uluru,
+                        map: map
+                    });
+                }
+			</script>
+			<script async defer
+					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM6SFeJnA9eAg0BaOMNYUQYAIpV_Vcggg&callback=initMap">
+			</script>
 	</body>
 </html>

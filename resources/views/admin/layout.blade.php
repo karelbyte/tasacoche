@@ -257,7 +257,8 @@
                             <li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-calendar-check-o"></i><span> Citas </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">
-                                    <li><a href="admin-sweet-alert.html">Listado de citas</a></li>
+                                    <li><a href="{{route('citas_config')}}">Ajustes</a></li>
+                                    <li><a href="{{route('citas')}}">Listado de citas</a></li>
                                     <li><a href="admin-widgets.html">Seguimiento de citas</a></li>
                                 </ul>
                             </li>
@@ -410,12 +411,13 @@
         <!-- <script src="{{asset('admin/pages/jquery.dashboard.js')}}"></script> -->
 
         <!-- App js -->
+        <script src="{{asset('admin/plugins/moment/moment.js')}}"></script>
         <script src="{{asset('admin/plugins/toastr/toastr.min.js')}}"></script>
         <script src="{{asset('admin/js/jquery.core.js')}}"></script>
         <script src="{{asset('admin/js/jquery.app.js')}}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+        <script src="{{asset('admin/appjs/lodash.js')}}"></script>
+        <script src="{{asset('admin/appjs/axios.min.js')}}"></script>
+        <script src="{{asset('admin/appjs/vue.min.js')}}"></script>
         <script src="{{asset('admin/appjs/tools.js')}}"></script>
 
         @yield('script')

@@ -39,8 +39,6 @@ new Vue({
     el: '#app',
     data () {
         return {
-            formData: 0,
-            gan: false,
             title: '',
             act: 'post',
             lists: [],
@@ -48,17 +46,19 @@ new Vue({
             unlookview: false,
             item: {
               id: 0,
-              nombre: '',
-              factor: '',
-              imagen: '',
-
+              name: '',
+              email: '',
+              password: '',
+              status_id: 0
             },
+            repassword: '',
             filters: {
-                marca: ''
+                fecha: '',
+                nombres: ''
             },
             orders: {
-                field: 'marca',
-                type: 'asc'
+                field: 'fecha',
+                type: 'desc'
             },
             pager: {
                 page: 1,
@@ -68,7 +68,6 @@ new Vue({
         }
     },
     mounted () {
-       this.formData = new FormData();
        this.getlist()
     },
     methods: {
@@ -78,7 +77,7 @@ new Vue({
             if (pPager !== undefined) { this.pager = pPager }
             axios({
                 method: 'get',
-                url: '/api/makes/list',
+                url: '/api/citas/list',
                 params: {start: this.pager.page - 1, take: this.pager.recordpage, filters: this.filters, orders: this.orders}
             }).then(response => {
                 this.lists = response.data.list;
@@ -88,35 +87,29 @@ new Vue({
             })
         },
         add () {
-            this.title = 'Añadir Marca';
-            this.item.nombre = '';
-            this.item.factor_conversion = '';
-            this.item.imagen = '/storage/makes/car.png';
+            this.title = 'Añadir usuario';
+            this.item.name = '';
+            this.item.email = '';
+            this.item.password = '';
+            this.repassword = '';
+            this.item.status_id = 0;
             this.act = 'post';
             this.unlookview = true
         },
         edit (it) {
            this.item = it;
            this.act = 'put';
-           this.title = 'Actualizar marca: <strong>' + this.item.marca + '</strong>';
+           this.item.password = '';
+           this.repassword = '';
+           this.title = 'Actualizar usuario ' + this.item.name;
            this.unlookview = true
         },
         save () {
            axios({
                 method: this.act,
-                url: '/api/makes' + (this.act === 'post' ? '' : '/' + this.item.id),
+                url: '/api/users' + (this.act === 'post' ? '' : '/' + this.item.id),
                 data: this.item
             }).then(response => {
-                if (this.formData !== 0) {
-                   let id = this.act === 'post' ? response.data.id : this.item.id;
-                   this.formData.append('id', id);
-                   axios.post('/api/makes/save/img', this.formData).then(res => {
-                      this.getlist()
-                   })
-                   .catch(err => {
-                      toastr["error"](err.response.data);
-                   })
-                }
                 toastr["success"](response.data);
                 this.getlist();
                 this.unlookview = false
@@ -128,7 +121,7 @@ new Vue({
         delitem () {
             axios({
                 method: 'delete',
-                url: '/api/makes/' + this.item.id
+                url: '/api/citas/' + this.item.id
             }).then(response => {
                 $('#modaldelete').modal('hide');
                 toastr["success"](response.data);
@@ -144,32 +137,6 @@ new Vue({
         },
         close () {
             this.unlookview = false
-        },
-        getGAN () {
-          this.gan = true;
-          axios.get('/api/makes/ganmakes').then(res => {
-              toastr["success"](res.data);
-              this.gan = false;
-              this.getlist();
-          })
-        },
-        find (tx) {
-            $('#' + tx).click()
-        },
-        getfile (e, targ) {
-            let files = e.target.files || e.dataTransfer.files;
-            if (!files.length) {
-                toastr["error"]('No se selecciono una imagen');
-            } else {
-                let file = null;
-                file = files[0];
-                this.item[targ] = URL.createObjectURL(file);
-                this.formData.append(targ, file)
-            }
-        },
-        getimg (img) {
-            console.log(img);
-            return img !== '' ? img : '/storage/makes/car.png';
         }
     }
 });

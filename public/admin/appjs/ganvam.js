@@ -58,7 +58,7 @@ new Vue({
                 toastr["success"](response.data);
                 this[shows] = false;
             }).catch(e => {
-                toastr["error"]('No se pudo conectar al servidor');
+                toastr["error"](e.response.error);
                 this[shows] = false;
             })
         }

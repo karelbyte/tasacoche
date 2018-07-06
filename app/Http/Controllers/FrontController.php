@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EnvioCita;
+use App\Models\Cita;
 use App\Models\Cms;
 use App\Models\Datosganvam;
 use App\Models\Marca;
@@ -9,6 +11,8 @@ use App\Models\Question;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class FrontController extends Controller
@@ -64,6 +68,8 @@ class FrontController extends Controller
 
           $footer = $footerLlaves->combine($footerValues);
 
+
+
           $data = [
 
               'header' => $header,
@@ -76,7 +82,9 @@ class FrontController extends Controller
 
               'contac' => $contac,
 
-              'footer' => $footer
+              'footer' => $footer,
+
+              //'marcas' => Marca::select('id', 'nombre', 'imagen')->get()
 
           ];
 
@@ -106,7 +114,7 @@ class FrontController extends Controller
 
       {
 
-        return 'Lo sentimos :(';
+        return $exception->getMessage();
 
       }
 
@@ -114,15 +122,27 @@ class FrontController extends Controller
 
     // FUNCIONES DE OBTENCION DE DATOS DE TASACION
 
-    public function getFuells() {
+    public function getFuells($model) {
 
-        return response()->json(DB::table('combustibles')->select('id', 'nombre', 'codigo')->get(), 200);
+        $fuelCode = DB::table('datos_ganvam')->select(DB::raw('distinct combustible'))->where('modelo', $model)->get();
+
+        $fuel = [];
+
+
+        foreach ($fuelCode as $fue) {
+
+          array_push($fuel, DB::table('combustibles')->select('*')->where('codigo', $fue->combustible)->first());
+
+        }
+        return response()->json( $fuel , 200);
 
     }
 
-    public function getPlaques() {
+    public function getPlaques($model, $com) {
 
-        return response()->json(DB::table('matriculaciones')->select('id', 'nombre', 'valor')->get(), 200);
+        $an = DB::table('datos_ganvam')->select(DB::raw('distinct anyo'))->where('modelo', $model)->where('combustible', $com)->orderby('anyo', 'asc')->get();
+
+        return response()->json($an, 200);
 
     }
 
@@ -131,19 +151,11 @@ class FrontController extends Controller
        $data = json_decode($request->input('data'), true);
 
 
-       /* $vesion =  Datosganvam::where('marca', $data['marca'])
-            ->where('modelo',$data['modelo'] )
-            ->where('anyo', $data['matricula'])
-            //->where('anyo', $data['matricula'])
+        $vesion = DB::table('datos_ganvam')
+            ->where('marca',$data['marca'] )
+            ->where('modelo', $data['modelo'])
             ->where('combustible', $data['combustible'])
-            ->select('id', 'version')->get(); */
-
-        $vesion =  DB::table('versiones')
-            ->join('version_matriculacion', 'versiones.id', 'version_matriculacion.id')
-            ->where('version_matriculacion.matriculacion_id',$data['matricula'] )
-            ->where('versiones.modelo_id', $data['modelo'])
-            ->where('versiones.combustible_id', $data['combustible'])
-            ->select('versiones.id', 'versiones.nombre')->get();
+            ->select('id', 'version')->get();
 
        return response()->json($vesion, 200);
 
@@ -151,7 +163,7 @@ class FrontController extends Controller
 
     public function getkms() {
 
-        return response()->json(DB::table('kilometraje')->select('*')->get(), 200);
+        return response()->json(DB::table('kilometraje')->select('*')->orderby('id', 'asc')->get(), 200);
 
     }
 
@@ -160,13 +172,49 @@ class FrontController extends Controller
 
         $data = json_decode($request->input('data'), true);
 
-        $tasa =  DB::table('version_matriculacion')
-            ->where('version_id',$data['version'] )
-            ->where('matriculacion_id', $data['matricula'])
-            ->where('kilometraje_id', $data['km'])
+        $tasa = DB::table('datos_ganvam')->select('*')
+            ->where('id', $data['version'] )
             ->select('tasacion')->first();
 
+        if ( empty($tasa) ) {    return response()->json('No existe una tasa', 500);}
+
         return response()->json($tasa->tasacion, 200);
+
+    }
+
+
+    public  function  cita_confirm ($token) {
+
+        $cita = Cita::where('token', $token)->select('*')->first();
+
+        $cita->status_id =  2;
+
+        $cita->save();
+
+        $nombres  = $cita->nombres;
+
+        $url = url('/'); //$_SERVER['SERVER_NAME'];
+
+        return view('front.cita', compact('nombres', 'url'));
+    }
+
+
+    public function setCita(Request $request) {
+
+       // $data = json_decode($request->input('data'), true);
+
+        $data = $request->all();
+
+        $data['token'] = base64_encode(random_bytes(10));
+
+        Cita::create($data);
+
+        $data['url'] = $request->root() . '/cita_confirm/' . $data['token'] ;
+
+
+        Mail::to($request->input('email'))->send(new EnvioCita($data));
+
+        return response()->json('Cita agendada, lo esparamos!', 200);
 
     }
 

@@ -20,6 +20,10 @@ Route::post('email', 'FrontController@sendemail')->name('email');
 
 Route::get('gan', 'HomeController@getData');
 
+Route::get('url', 'FrontController@url');
+
+Route::get('cita_confirm/{token}', 'FrontController@cita_confirm');
+
 Auth::routes();
 
 
@@ -53,6 +57,11 @@ Route::middleware('auth')->group(function () {
 
     // RUTA DE MODELOS
     Route::get('back/models', 'ModelosController@index')->name('models') ;
+
+    // RUTA DE CITAS
+    Route::get('back/citas', 'CitasController@index')->name('citas') ;
+
+    Route::get('back/citas_config', 'CitasconfigController@index')->name('citas_config') ;
 
     // RUTA DE GANVAM
     Route::get('back/ganvam', 'GanvamController@index')->name('ganvam') ;
